@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -5,6 +7,7 @@ public class Cate {
     private static final String filePath = "src/main/data/cate.txt";
     private static final ArrayList<Task> list = Storage.loadTask(filePath);
     private static final String line = "    _______________________________________\n";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
     public static void main(String[] args) {
         String startup = line
@@ -51,7 +54,7 @@ public class Cate {
         } else if (userInput.startsWith("deadline ")) {
             String input = userInput.split(" ", 2)[1];
             String[] parts = input.split(" /by ", 2);
-            Task newTask = new Deadline(parts[0], parts[1]);
+            Task newTask = new Deadline(parts[0], LocalDateTime.parse(parts[1], formatter));
             addTask(newTask);
             Storage.saveTask(newTask, filePath);
         } else if (userInput.startsWith("event ")) {
