@@ -2,7 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Cate {
-    private static final ArrayList<Task> list = new ArrayList<>();
+    private static final String filePath = "src/main/data/cate.txt";
+    private static final ArrayList<Task> list = Storage.loadTask(filePath);
     private static final String line = "    _______________________________________\n";
 
     public static void main(String[] args) {
@@ -46,17 +47,20 @@ public class Cate {
             String description = userInput.split(" ", 2)[1];
             Task newTask = new Todo(description);
             addTask(newTask);
+            Storage.saveTask(newTask, filePath);
         } else if (userInput.startsWith("deadline ")) {
             String input = userInput.split(" ", 2)[1];
             String[] parts = input.split(" /by ", 2);
             Task newTask = new Deadline(parts[0], parts[1]);
             addTask(newTask);
+            Storage.saveTask(newTask, filePath);
         } else if (userInput.startsWith("event ")) {
             String input = userInput.split(" ", 2)[1];
             String[] parts = input.split(" /from ", 2);
             String[] time = parts[1].split(" /to ", 2);
             Task newTask = new Event(parts[0], time[0], time[1]);
             addTask(newTask);
+            Storage.saveTask(newTask, filePath);
         } else {
             throw new CateException("I'm sorry I don't understand!");
         }
