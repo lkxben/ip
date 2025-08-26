@@ -1,11 +1,15 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class Storage {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
     public static ArrayList<Task> loadTask(String filePath) {
         ArrayList<Task> output = new ArrayList<>();
         try {
@@ -20,7 +24,7 @@ public class Storage {
                 if (parts[0].equals("T")) {
                     t = new Todo(desc);
                 } else if (parts[0].equals("D")) {
-                    t = new Deadline(desc, parts[3]);
+                    t = new Deadline(desc, LocalDateTime.parse(parts[3], formatter));
                 } else if (parts[0].equals("E")) {
                     t = new Event(desc, parts[3], parts[4]);
                 }
