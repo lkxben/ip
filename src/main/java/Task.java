@@ -15,6 +15,8 @@ abstract class Task {
         this.isDone = false;
     }
 
+    public abstract String toFileString();
+
     @Override
     public String toString() {
         return String.format("[%s] %s", isDone ? "X" : " ", description);
