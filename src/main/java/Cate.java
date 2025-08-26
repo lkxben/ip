@@ -9,12 +9,13 @@ public class Cate {
     private static final String line = "    _______________________________________\n";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
-    public static void main(String[] args) {
-        String startup = line
-                + "    Hello! I'm Cate\n"
-                + "    What can I do for you?\n"
-                + line;
-        System.out.println(startup);
+    private Ui ui;
+
+    public Cate(String filePath) {
+        ui = new Ui();
+    }
+
+    public void run() {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -26,7 +27,12 @@ public class Cate {
                 System.out.println(line + "    " + e.getMessage() + "\n" + line);
             }
         }
+
         System.out.print(line + "    Bye. Hope to see you again soon!\n" + line);
+    }
+
+    public static void main(String[] args) {
+        new Cate(filePath).run();
     }
 
     private static void processUserInput(String userInput) throws CateException {
