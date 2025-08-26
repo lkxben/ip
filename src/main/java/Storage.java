@@ -9,8 +9,13 @@ import java.io.IOException;
 
 public class Storage {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    private final String filePath;
 
-    public static ArrayList<Task> loadTask(String filePath) {
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public ArrayList<Task> load() {
         ArrayList<Task> output = new ArrayList<>();
         try {
             File file = new File(filePath);
@@ -41,7 +46,7 @@ public class Storage {
         return output;
     }
 
-    public static void saveTask(Task task, String filePath) {
+    public void saveTask(Task task) {
         try (FileWriter writer = new FileWriter(filePath, true)) {
             writer.write(task.toFileString() + System.lineSeparator());
         } catch (IOException e) {
