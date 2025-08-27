@@ -48,6 +48,9 @@ public class Parser {
             String number = input.split(" ")[1];
             int value = Integer.parseInt(number);
             tasks.deleteTask(value);
+        } else if (input.startsWith("find ")) {
+            String query = input.split(" ", 2)[1];
+            tasks.findTasks(query);
         } else if (input.startsWith("todo ")) {
             String description = input.split(" ", 2)[1];
             Task newTask = new Todo(description);

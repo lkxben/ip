@@ -42,6 +42,10 @@ public abstract class Task {
      */
     public abstract String toFileString();
 
+    public boolean descriptionContains(String query) {
+        return this.description.contains(query);
+    }
+
     /**
      * Returns a human-readable string representation of this {@code Task}.
      * The format is:
