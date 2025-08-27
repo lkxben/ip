@@ -1,4 +1,11 @@
+package cate.ui;
+
 import java.util.Scanner;
+
+import cate.task.TaskList;
+import cate.util.Storage;
+import cate.util.Parser;
+import cate.util.CateException;
 
 public class Cate {
     private static final String filePath = "src/main/data/cate.txt";
