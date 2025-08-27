@@ -5,9 +5,32 @@ import cate.task.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Handles parsing and execution of user commands in the Cate application.
+ * The {@code Parser} interprets user input, updates the {@link TaskList},
+ * and saves tasks through {@link Storage}.
+ */
 public class Parser {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
+    /**
+     * Parses a user input command and executes the corresponding action.
+     * Supported commands include:
+     * <ul>
+     *     <li>{@code list} – Shows all tasks.</li>
+     *     <li>{@code todo <description>} – Adds a new {@link Todo}.</li>
+     *     <li>{@code deadline <description> /by <yyyy-MM-dd HHmm>} – Adds a new {@link Deadline}.</li>
+     *     <li>{@code event <description> /from <start> /to <end>} – Adds a new {@link Event}.</li>
+     *     <li>{@code mark <index>} – Marks a task as done.</li>
+     *     <li>{@code unmark <index>} – Marks a task as not done.</li>
+     *     <li>{@code delete <index>} – Deletes a task.</li>
+     * </ul>
+     *
+     * @param input   The raw user input string.
+     * @param tasks   The {@link TaskList} that stores tasks.
+     * @param storage The {@link Storage} used for saving tasks persistently.
+     * @throws CateException If the command is invalid, malformed, or incomplete.
+     */
     public static void parse(String input, TaskList tasks, Storage storage) throws CateException {
         if (input.equals("list")) {
             tasks.printList();
