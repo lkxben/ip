@@ -10,6 +10,10 @@ public class TaskList {
         this.list = list;
     }
 
+    public ArrayList<Task> getList() {
+        return new ArrayList<>(list);
+    }
+
     public void addTask(Task task) {
         System.out.println(line + "    Got it. I've added this task:\n      " + task.toString());
         list.add(task);
