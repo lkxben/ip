@@ -1,3 +1,5 @@
+package cate.ui;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -9,7 +11,7 @@ public class Ui {
 
     public void showStartupMessage() {
         System.out.println(line
-                + "    Hello! I'm Cate\n"
+                + "    Hello! I'm cate.ui.Cate\n"
                 + "    What can I do for you?\n"
                 + line);
     }
