@@ -87,6 +87,17 @@ public class TaskList {
         System.out.println(line);
     }
 
+    public void findTasks(String query) {
+        System.out.print(line);
+        System.out.println("    Here are the matching tasks in your list:\n");
+        for (Task t : list) {
+            if (t.descriptionContains(query)) {
+                System.out.println("    " + t);
+            }
+        }
+        System.out.println(line);
+    }
+
     /**
      * Prints all tasks in the list in order,
      * including their index and string representation.
