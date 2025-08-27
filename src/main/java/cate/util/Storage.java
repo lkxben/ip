@@ -14,14 +14,36 @@ import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Handles persistent storage of tasks for the Cate application.
+ * The {@code Storage} class loads tasks from a file at startup
+ * and saves tasks to the file when new tasks are added.
+ */
 public class Storage {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private final String filePath;
 
+    /**
+     * Constructs a {@code Storage} instance with the given file path.
+     *
+     * @param filePath The path to the file where tasks will be saved and loaded.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads tasks from the file into memory.
+     * Each line in the file corresponds to one task in the format:
+     * <ul>
+     *   <li>{@code T,doneFlag,description}</li>
+     *   <li>{@code D,doneFlag,description,yyyy-MM-dd HHmm}</li>
+     *   <li>{@code E,doneFlag,description,start,end}</li>
+     * </ul>
+     * where {@code doneFlag} is {@code 1} if the task is completed, otherwise {@code 0}.
+     *
+     * @return An {@link ArrayList} containing the loaded tasks.
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> output = new ArrayList<>();
         try {
@@ -53,11 +75,16 @@ public class Storage {
         return output;
     }
 
+    /**
+     * Appends a single task to the file in its storage format.
+     *
+     * @param task The {@link Task} to be saved.
+     */
     public void saveTask(Task task) {
         try (FileWriter writer = new FileWriter(filePath, true)) {
             writer.write(task.toFileString() + System.lineSeparator());
         } catch (IOException e) {
-            // ignore
+            // Ignored silently
         }
     }
 }
