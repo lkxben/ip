@@ -31,13 +31,6 @@ public class Ui {
                 + line);
     }
 
-    /**
-     * Displays the farewell message when the program ends.
-     */
-    public void showBye() {
-        System.out.print(line + "    Bye. Hope to see you again soon!\n" + line);
-    }
-
     public String printList(TaskList tasks) {
         StringBuilder output = new StringBuilder("Here are the tasks in your list:\n");
         Task[] list;

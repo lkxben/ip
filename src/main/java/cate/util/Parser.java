@@ -37,7 +37,9 @@ public class Parser {
      * @throws CateException If the command is invalid, malformed, or incomplete.
      */
     public static Command parse(String input) throws CateException {
-        if (input.equals("list")) {
+        if (input.equals("bye")) {
+            return new ExitCommand();
+        } else if (input.equals("list")) {
             return new ListCommand();
         } else if (input.equals("todo")) {
             throw new CateException("The description of a todo cannot be empty.");

@@ -23,11 +23,17 @@ public class MainWindow extends AnchorPane {
     private Cate cate;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image cateImage = new Image(this.getClass().getResourceAsStream("/images/DaCate.png"));
+    private static final String STARTUP_MESSAGE =
+            "Hello! I'm Cate\n"
+                    + "What can I do for you?\n";
 
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.getChildren().addAll(
+                DialogBox.getCateDialog(STARTUP_MESSAGE, cateImage)
+        );
     }
 
     /** Injects the Cate instance */
@@ -36,7 +42,7 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
+     * Creates two dialog boxes, one echoing user input and the other containing Cate's reply and then appends them to
      * the dialog container. Clears the user input after processing.
      */
     @FXML
@@ -45,8 +51,12 @@ public class MainWindow extends AnchorPane {
         String response = cate.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getCateDialog(response, cateImage)
         );
         userInput.clear();
+
+        if (cate.isExit()) {
+            javafx.application.Platform.exit();
+        }
     }
 }

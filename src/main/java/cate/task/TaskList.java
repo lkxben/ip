@@ -56,7 +56,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public void deleteTask(int i) {
-        Task t = list.get(i - 1);
+        Task t = list.get(i);
         list.remove(t);
     }
 
@@ -68,7 +68,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public void markTask(int i) {
-        Task t = list.get(i - 1);
+        Task t = list.get(i);
         t.markDone();
     }
 
@@ -80,7 +80,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public void unmarkTask(int i) {
-        Task t = list.get(i - 1);
+        Task t = list.get(i);
         t.markUndone();
     }
 
