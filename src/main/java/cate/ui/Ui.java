@@ -1,5 +1,8 @@
 package cate.ui;
 
+import cate.task.Task;
+import cate.task.TaskList;
+
 import java.util.Scanner;
 
 /**
@@ -29,35 +32,38 @@ public class Ui {
     }
 
     /**
-     * Prints a horizontal line for separating sections of output.
-     */
-    public void showLine() {
-        System.out.print(line);
-    }
-
-    /**
-     * Displays a message to the user in a formatted box.
-     *
-     * @param message The message to display.
-     */
-    public void showMessage(String message) {
-        System.out.println(line + "    " + message + "\n" + line);
-    }
-
-    /**
      * Displays the farewell message when the program ends.
      */
     public void showBye() {
         System.out.print(line + "    Bye. Hope to see you again soon!\n" + line);
     }
 
-    /**
-     * Reads a command from the user input.
-     *
-     * @param scanner The {@link Scanner} object used to read input.
-     * @return The line of text entered by the user.
-     */
-    public String readCommand(Scanner scanner) {
-        return scanner.nextLine();
+    public String printList(TaskList tasks) {
+        StringBuilder output = new StringBuilder("Here are the tasks in your list:\n");
+        Task[] list;
+        list = tasks.getList().toArray(new Task[0]);
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] == null) {
+                break;
+            }
+            output.append(String.format("    %d. %s\n", i + 1, list[i]));
+        }
+        return output.toString();
+    }
+
+    public String addTask(Task t) {
+        return String.format("Got it. I've added this task:\n%s", t);
+    }
+
+    public String deleteTask(Task t, int size) {
+        return String.format("Noted. I've removed this task:\n%s\nNow you have %d tasks in the list.\n", t, size);
+    }
+
+    public String markTask(Task t) {
+        return String.format("Nice! I've marked this task as done:\n%s", t);
+    }
+
+    public String unmarkTask(Task t) {
+        return String.format("OK, I've marked this task as not done yet:\n%s", t);
     }
 }

@@ -65,10 +65,10 @@ public class Cate {
         String output = "";
         try {
             Command c = Parser.parse(input);
-            output = c.execute(storage, tasks);
+            output = c.execute(storage, tasks, ui);
 //        isExit = c.isExit();
         } catch (CateException e) {
-            ui.showMessage(e.getMessage());
+            return e.getMessage();
         }
         return output;
     }

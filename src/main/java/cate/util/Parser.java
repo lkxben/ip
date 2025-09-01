@@ -43,15 +43,15 @@ public class Parser {
             throw new CateException("The description of a todo cannot be empty.");
         } else if (input.startsWith("mark ")) {
             String number = input.split(" ")[1];
-            int value = Integer.parseInt(number);
+            int value = Integer.parseInt(number) - 1;
             return new MarkCommand(value);
         } else if (input.startsWith("unmark ")) {
             String number = input.split(" ")[1];
-            int value = Integer.parseInt(number);
+            int value = Integer.parseInt(number) - 1;
             return new UnmarkCommand(value);
         } else if (input.startsWith("delete ")) {
             String number = input.split(" ")[1];
-            int value = Integer.parseInt(number);
+            int value = Integer.parseInt(number) - 1;
             return new DeleteCommand(value);
         } else if (input.startsWith("find ")) {
             String query = input.split(" ", 2)[1];

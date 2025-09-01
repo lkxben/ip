@@ -2,6 +2,7 @@ package cate.command;
 
 import cate.task.Task;
 import cate.task.TaskList;
+import cate.ui.Ui;
 import cate.util.Storage;
 
 public class AddCommand extends Command {
@@ -12,9 +13,9 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public String execute(Storage storage, TaskList tasks) {
+    public String execute(Storage storage, TaskList tasks, Ui ui) {
         tasks.addTask(task);
         storage.saveTask(task);
-        return "ADDED";
+        return ui.addTask(task);
     }
 }
