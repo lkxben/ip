@@ -93,15 +93,14 @@ public class TaskList {
      *
      * @param query the keyword to search for within task descriptions
      */
-    public void findTasks(String query) {
-        System.out.print(line);
-        System.out.println("    Here are the matching tasks in your list:\n");
+    public ArrayList<Task> findTasks(String query) {
+        ArrayList<Task> output = new ArrayList<>();
         for (Task t : list) {
             if (t.descriptionContains(query)) {
-                System.out.println("    " + t);
+                output.add(t);
             }
         }
-        System.out.println(line);
+        return output;
     }
 
     /**

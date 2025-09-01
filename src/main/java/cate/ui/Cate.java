@@ -2,6 +2,7 @@ package cate.ui;
 
 import java.util.Scanner;
 
+import cate.command.Command;
 import cate.task.TaskList;
 import cate.util.CateException;
 import cate.util.Parser;
@@ -19,6 +20,7 @@ public class Cate {
     private Ui ui;
     private TaskList tasks;
     private Storage storage;
+    private boolean isExit = false;
 
     /**
      * Constructs a {@code Cate} instance with the given file path
@@ -32,34 +34,43 @@ public class Cate {
         tasks = new TaskList(storage.load());
     }
 
-    /**
-     * Runs the main program loop for the Cate application.
-     * Continuously reads user input, parses it into commands,
-     * and executes them until the user enters {@code "bye"}.
-     * Handles invalid commands and errors by showing messages via {@link Ui}.
-     */
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            String userInput = ui.readCommand(scanner);
-            if (userInput.equals("bye")) {
-                break;
-            }
-            try {
-                Parser.parse(userInput, tasks, storage);
-            } catch (CateException e) {
-                ui.showMessage(e.getMessage());
-            }
-        }
-        ui.showBye();
-    }
+//    /**
+//     * Runs the main program loop for the Cate application.
+//     * Continuously reads user input, parses it into commands,
+//     * and executes them until the user enters {@code "bye"}.
+//     * Handles invalid commands and errors by showing messages via {@link Ui}.
+//     */
+//    public void run() {
+//        Scanner scanner = new Scanner(System.in);
+//
+//        while (true) {
+//            String userInput = ui.readCommand(scanner);
+//            if (userInput.equals("bye")) {
+//                break;
+//            }
+//            try {
+//                Parser.parse(userInput, tasks, storage);
+//            } catch (CateException e) {
+//                ui.showMessage(e.getMessage());
+//            }
+//        }
+//        ui.showBye();
+//    }
 
     /**
      * Generates a response for the user's chat message.
      */
     public String getResponse(String input) {
-        return "Cate heard: " + input;
+        if (isExit) return "";
+        String output = "";
+        try {
+            Command c = Parser.parse(input);
+            output = c.execute(storage, tasks);
+//        isExit = c.isExit();
+        } catch (CateException e) {
+            ui.showMessage(e.getMessage());
+        }
+        return output;
     }
 
     /**
@@ -68,6 +79,6 @@ public class Cate {
      * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
-        new Cate(filePath).run();
+
     }
 }
