@@ -9,10 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import cate.task.Deadline;
-import cate.task.Event;
-import cate.task.Task;
-import cate.task.Todo;
+import cate.task.*;
 
 /**
  * Handles persistent storage of tasks for the Cate application.
@@ -85,6 +82,16 @@ public class Storage {
     public void saveTask(Task task) {
         try (FileWriter writer = new FileWriter(filePath, true)) {
             writer.write(task.toFileString() + System.lineSeparator());
+        } catch (IOException e) {
+            // Ignored silently
+        }
+    }
+
+    public void save(TaskList tasks) {
+        try (FileWriter writer = new FileWriter(filePath, false)) {
+            for (Task task : tasks.getList()) {
+                writer.write(task.toFileString() + System.lineSeparator());
+            }
         } catch (IOException e) {
             // Ignored silently
         }
