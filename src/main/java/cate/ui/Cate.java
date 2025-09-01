@@ -56,6 +56,13 @@ public class Cate {
     }
 
     /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Cate heard: " + input;
+    }
+
+    /**
      * Launches the Cate application.
      *
      * @param args Command-line arguments (not used).
