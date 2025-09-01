@@ -3,9 +3,9 @@ package cate.ui;
 import java.util.Scanner;
 
 import cate.task.TaskList;
-import cate.util.Storage;
-import cate.util.Parser;
 import cate.util.CateException;
+import cate.util.Parser;
+import cate.util.Storage;
 
 /**
  * The main entry point for the Cate application.
@@ -43,7 +43,9 @@ public class Cate {
 
         while (true) {
             String userInput = ui.readCommand(scanner);
-            if (userInput.equals("bye")) break;
+            if (userInput.equals("bye")) {
+                break;
+            }
             try {
                 Parser.parse(userInput, tasks, storage);
             } catch (CateException e) {

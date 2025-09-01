@@ -1,14 +1,14 @@
 package cate.task;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class TaskListTest {
     @Test
-    public void taskList_addTask(){
+    public void taskList_addTask() {
         TaskList tasks = new TaskList(new ArrayList<Task>());
         Task task = new Todo("new");
         ArrayList<Task> output = new ArrayList<>();

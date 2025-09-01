@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * and printing tasks, while also providing access to the underlying list.
  */
 public class TaskList {
-    private ArrayList<Task> list;
     private static final String line = "    _______________________________________\n";
+    private ArrayList<Task> list;
 
     /**
      * Constructs a {@code TaskList} with an existing list of tasks.
@@ -87,6 +87,12 @@ public class TaskList {
         System.out.println(line);
     }
 
+    /**
+     * Searches the task list for tasks whose descriptions contain the given query
+     * string and prints the matching tasks to the console.
+     *
+     * @param query the keyword to search for within task descriptions
+     */
     public void findTasks(String query) {
         System.out.print(line);
         System.out.println("    Here are the matching tasks in your list:\n");
@@ -106,7 +112,9 @@ public class TaskList {
         System.out.print(line);
         System.out.println("    Here are the tasks in your list:");
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) == null) break;
+            if (list.get(i) == null) {
+                break;
+            }
             System.out.println(String.format("    %d. %s", i + 1, list.get(i)));
         }
         System.out.println(line);
