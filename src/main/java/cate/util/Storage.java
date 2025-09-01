@@ -1,18 +1,18 @@
 package cate.util;
 
-import cate.task.Deadline;
-import cate.task.Event;
-import cate.task.Task;
-import cate.task.Todo;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import cate.task.Deadline;
+import cate.task.Event;
+import cate.task.Task;
+import cate.task.Todo;
 
 /**
  * Handles persistent storage of tasks for the Cate application.
@@ -51,7 +51,9 @@ public class Storage {
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
                 String line = sc.nextLine().trim();
-                if (line.isEmpty()) continue;
+                if (line.isEmpty()) {
+                    continue;
+                }
                 String[] parts = line.split(",");
                 String desc = parts[2];
                 Task t = null;

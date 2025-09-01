@@ -1,9 +1,13 @@
 package cate.util;
 
-import cate.task.*;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import cate.task.Deadline;
+import cate.task.Event;
+import cate.task.Task;
+import cate.task.TaskList;
+import cate.task.Todo;
 
 /**
  * Handles parsing and execution of user commands in the Cate application.
