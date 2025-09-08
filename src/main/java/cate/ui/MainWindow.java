@@ -11,6 +11,10 @@ import javafx.scene.layout.VBox;
  * Controller for the main GUI.
  */
 public class MainWindow extends AnchorPane {
+    private static final String STARTUP_MESSAGE =
+            "Hello! I'm Cate\n"
+                    + "What can I do for you?\n";
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -21,12 +25,8 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Cate cate;
-
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image cateImage = new Image(this.getClass().getResourceAsStream("/images/DaCate.png"));
-    private static final String STARTUP_MESSAGE =
-            "Hello! I'm Cate\n"
-                    + "What can I do for you?\n";
 
     @FXML
     public void initialize() {

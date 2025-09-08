@@ -30,7 +30,7 @@ public class TaskList {
         return new ArrayList<>(list);
     }
 
-    public Task get(int index) {
+    public Task getTask(int index) {
         return list.get(index);
     }
 
