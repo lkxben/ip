@@ -71,7 +71,9 @@ public class Parser {
         if (tokens.length < 2) {
             throw new CateException("Index required.");
         }
-        return Integer.parseInt(tokens[1]) - 1;
+        int val = IInteger.parseInt(tokens[1]) - 1;
+        assert val >= 0;
+        return val;
     }
 
     /**
