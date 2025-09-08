@@ -32,8 +32,6 @@ public class Parser {
      * </ul>
      *
      * @param input   The raw user input string.
-     * @param tasks   The {@link TaskList} that stores tasks.
-     * @param storage The {@link Storage} used for saving tasks persistently.
      * @throws CateException If the command is invalid, malformed, or incomplete.
      */
     public static Command parse(String input) throws CateException {
@@ -46,14 +44,17 @@ public class Parser {
         } else if (input.startsWith("mark ")) {
             String number = input.split(" ")[1];
             int value = Integer.parseInt(number) - 1;
+            assert value >= 0;
             return new MarkCommand(value);
         } else if (input.startsWith("unmark ")) {
             String number = input.split(" ")[1];
             int value = Integer.parseInt(number) - 1;
+            assert value >= 0;
             return new UnmarkCommand(value);
         } else if (input.startsWith("delete ")) {
             String number = input.split(" ")[1];
             int value = Integer.parseInt(number) - 1;
+            assert value >= 0;
             return new DeleteCommand(value);
         } else if (input.startsWith("find ")) {
             String query = input.split(" ", 2)[1];

@@ -8,6 +8,7 @@ public class UnmarkCommand extends Command {
     private int index;
 
     public UnmarkCommand(int index) {
+        assert index >= 0;
         this.index = index;
     }
 
