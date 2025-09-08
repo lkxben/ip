@@ -37,26 +37,26 @@ public class Parser {
         String command = tokens[0];
 
         switch (command) {
-            case "bye":
-                return new ExitCommand();
-            case "list":
-                return new ListCommand();
-            case "mark":
-                return new MarkCommand(parseIndex(tokens));
-            case "unmark":
-                return new UnmarkCommand(parseIndex(tokens));
-            case "delete":
-                return new DeleteCommand(parseIndex(tokens));
-            case "find":
-                return new FindCommand(requireArgument(tokens, "find"));
-            case "todo":
-                return parseTodo(tokens);
-            case "deadline":
-                return parseDeadline(tokens);
-            case "event":
-                return parseEvent(tokens);
-            default:
-                throw new CateException("I'm sorry I don't understand!");
+        case "bye":
+            return new ExitCommand();
+        case "list":
+            return new ListCommand();
+        case "mark":
+            return new MarkCommand(parseIndex(tokens));
+        case "unmark":
+            return new UnmarkCommand(parseIndex(tokens));
+        case "delete":
+            return new DeleteCommand(parseIndex(tokens));
+        case "find":
+            return new FindCommand(requireArgument(tokens, "find"));
+        case "todo":
+            return parseTodo(tokens);
+        case "deadline":
+            return parseDeadline(tokens);
+        case "event":
+            return parseEvent(tokens);
+        default:
+            throw new CateException("I'm sorry I don't understand!");
         }
     }
 
