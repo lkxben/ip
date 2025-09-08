@@ -1,7 +1,5 @@
 package cate.ui;
 
-import java.util.Scanner;
-
 import cate.command.Command;
 import cate.task.TaskList;
 import cate.util.CateException;

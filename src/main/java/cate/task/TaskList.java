@@ -1,6 +1,7 @@
 package cate.task;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Represents a collection of {@link Task} objects.
@@ -91,12 +92,9 @@ public class TaskList {
      * @param query the keyword to search for within task descriptions
      */
     public ArrayList<Task> findTasks(String query) {
-        ArrayList<Task> output = new ArrayList<>();
-        for (Task t : list) {
-            if (t.descriptionContains(query)) {
-                output.add(t);
-            }
-        }
-        return output;
+        return list.stream()
+                .filter(t -> t.descriptionContains(query))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
+
 }

@@ -1,9 +1,11 @@
 package cate.ui;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import cate.task.Task;
 import cate.task.TaskList;
-
-import java.util.Scanner;
 
 /**
  * Handles all user interface interactions for the Cate application.
@@ -32,16 +34,11 @@ public class Ui {
     }
 
     public String printList(TaskList tasks) {
-        StringBuilder output = new StringBuilder("Here are the tasks in your list:\n");
-        Task[] list;
-        list = tasks.getList().toArray(new Task[0]);
-        for (int i = 0; i < list.length; i++) {
-            if (list[i] == null) {
-                break;
-            }
-            output.append(String.format("    %d. %s\n", i + 1, list[i]));
-        }
-        return output.toString();
+        List<Task> list = tasks.getList();
+        String tasksStr = IntStream.range(0, list.size())
+                .mapToObj(i -> String.format("    %d. %s", i + 1, list.get(i)))
+                .collect(Collectors.joining("\n"));
+        return "Here are the tasks in your list:\n" + tasksStr;
     }
 
     public String addTask(Task t) {
