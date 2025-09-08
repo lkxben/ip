@@ -8,6 +8,7 @@ public class MarkCommand extends Command {
     private int index;
 
     public MarkCommand(int index) {
+        assert index >= 0;
         this.index = index;
     }
 

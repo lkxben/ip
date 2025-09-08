@@ -1,7 +1,6 @@
 package cate.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -48,6 +47,7 @@ public class Storage {
     public ArrayList<Task> load() {
         ArrayList<Task> output = new ArrayList<>();
         try {
+            ensureFileExists();
             File file = new File(filePath);
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
@@ -72,7 +72,7 @@ public class Storage {
                 output.add(t);
             }
             sc.close();
-        } catch (FileNotFoundException ignored) {
+        } catch (IOException ignored) {
             return output;
         }
         return output;
@@ -84,20 +84,34 @@ public class Storage {
      * @param task The {@link Task} to be saved.
      */
     public void saveTask(Task task) {
-        try (FileWriter writer = new FileWriter(filePath, true)) {
-            writer.write(task.toFileString() + System.lineSeparator());
+        try {
+            ensureFileExists();
+            try (FileWriter writer = new FileWriter(filePath, true)) {
+                writer.write(task.toFileString() + System.lineSeparator());
+            }
         } catch (IOException e) {
             // Ignored silently
         }
     }
 
     public void save(TaskList tasks) {
-        try (FileWriter writer = new FileWriter(filePath, false)) {
-            for (Task task : tasks.getList()) {
-                writer.write(task.toFileString() + System.lineSeparator());
+        try {
+            ensureFileExists();
+            try (FileWriter writer = new FileWriter(filePath, false)) {
+                for (Task task : tasks.getList()) {
+                    writer.write(task.toFileString() + System.lineSeparator());
+                }
             }
         } catch (IOException e) {
             // Ignored silently
+        }
+    }
+
+    private void ensureFileExists() throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
         }
     }
 }

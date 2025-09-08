@@ -5,20 +5,20 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task with a specific deadline.
- * A {@code Deadline} has a description, completion status, and a date/time by which it is due.
+ * A {@code Deadline} has a description, completion status, and a date/time dueDate which it is due.
  */
 public class Deadline extends Task {
-    protected LocalDateTime by;
+    protected LocalDateTime dueDate;
 
     /**
      * Constructs a {@code Deadline} task with the given description and deadline.
      *
      * @param description The description of the task.
-     * @param by The {@link LocalDateTime} representing the deadline of the task.
+     * @param dueDate The {@link LocalDateTime} representing the deadline of the task.
      */
-    public Deadline(String description, LocalDateTime by) {
+    public Deadline(String description, LocalDateTime dueDate) {
         super(description);
-        this.by = by;
+        this.dueDate = dueDate;
     }
 
     /**
@@ -35,7 +35,7 @@ public class Deadline extends Task {
     @Override
     public String toFileString() {
         return String.format("D,%d,%s,%s", isDone ? 1 : 0,
-                description, by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")));
+                description, dueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")));
     }
 
     /**
@@ -52,6 +52,6 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return String.format("[D] %s (by: %s)", super.toString(),
-                by.format(DateTimeFormatter.ofPattern("MMM dd yyyy HHmm")));
+                dueDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy HHmm")));
     }
 }
