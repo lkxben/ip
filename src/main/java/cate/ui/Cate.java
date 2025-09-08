@@ -1,7 +1,5 @@
 package cate.ui;
 
-import java.util.Scanner;
-
 import cate.command.Command;
 import cate.task.TaskList;
 import cate.util.CateException;
@@ -14,9 +12,6 @@ import cate.util.Storage;
  * task storage, and task execution loop.
  */
 public class Cate {
-    private static final String filePath = "src/main/data/cate.txt";
-    private static final String line = "    _______________________________________\n";
-
     private Ui ui;
     private TaskList tasks;
     private Storage storage;
@@ -53,11 +48,6 @@ public class Cate {
         return isExit;
     }
 
-    /**
-     * Launches the Cate application.
-     *
-     * @param args Command-line arguments (not used).
-     */
     public static void main(String[] args) {
 
     }

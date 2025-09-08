@@ -15,6 +15,6 @@ public class MarkCommand extends Command {
     public String execute(Storage storage, TaskList tasks, Ui ui) {
         tasks.markTask(index);
         storage.save(tasks);
-        return ui.markTask(tasks.get(index));
+        return ui.markTask(tasks.getTask(index));
     }
 }

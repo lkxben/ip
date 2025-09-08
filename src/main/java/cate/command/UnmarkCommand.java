@@ -15,6 +15,6 @@ public class UnmarkCommand extends Command {
     public String execute(Storage storage, TaskList tasks, Ui ui) {
         tasks.unmarkTask(index);
         storage.save(tasks);
-        return ui.unmarkTask(tasks.get(index));
+        return ui.unmarkTask(tasks.getTask(index));
     }
 }
