@@ -6,7 +6,7 @@ import cate.ui.Ui;
 import cate.util.Storage;
 
 public class FindCommand extends Command {
-    String query;
+    private String query;
 
     public FindCommand(String query) {
         this.query = query;

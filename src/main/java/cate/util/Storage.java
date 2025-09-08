@@ -8,7 +8,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import cate.task.*;
+import cate.task.Deadline;
+import cate.task.Event;
+import cate.task.Task;
+import cate.task.TaskList;
+import cate.task.Todo;
 
 /**
  * Handles persistent storage of tasks for the Cate application.

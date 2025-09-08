@@ -3,7 +3,14 @@ package cate.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import cate.command.*;
+import cate.command.AddCommand;
+import cate.command.Command;
+import cate.command.DeleteCommand;
+import cate.command.ExitCommand;
+import cate.command.FindCommand;
+import cate.command.ListCommand;
+import cate.command.MarkCommand;
+import cate.command.UnmarkCommand;
 import cate.task.Deadline;
 import cate.task.Event;
 import cate.task.Task;
@@ -19,63 +26,116 @@ public class Parser {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
     /**
-     * Parses a user input command and executes the corresponding action.
-     * Supported commands include:
-     * <ul>
-     *     <li>{@code list} – Shows all tasks.</li>
-     *     <li>{@code todo <description>} – Adds a new {@link Todo}.</li>
-     *     <li>{@code deadline <description> /by <yyyy-MM-dd HHmm>} – Adds a new {@link Deadline}.</li>
-     *     <li>{@code event <description> /from <start> /to <end>} – Adds a new {@link Event}.</li>
-     *     <li>{@code mark <index>} – Marks a task as done.</li>
-     *     <li>{@code unmark <index>} – Marks a task as not done.</li>
-     *     <li>{@code delete <index>} – Deletes a task.</li>
-     * </ul>
+     * Parses a raw user input string into a corresponding {@link Command}.
      *
-     * @param input   The raw user input string.
-     * @throws CateException If the command is invalid, malformed, or incomplete.
+     * @param input the raw user input
+     * @return a {@link Command} instance representing the parsed input
+     * @throws CateException if the input is invalid or cannot be parsed into a command
      */
     public static Command parse(String input) throws CateException {
-        if (input.equals("bye")) {
+        String[] tokens = input.trim().split(" ", 2);
+        String command = tokens[0];
+
+        switch (command) {
+        case "bye":
             return new ExitCommand();
-        } else if (input.equals("list")) {
+        case "list":
             return new ListCommand();
-        } else if (input.equals("todo")) {
-            throw new CateException("The description of a todo cannot be empty.");
-        } else if (input.startsWith("mark ")) {
-            String number = input.split(" ")[1];
-            int value = Integer.parseInt(number) - 1;
-            assert value >= 0;
-            return new MarkCommand(value);
-        } else if (input.startsWith("unmark ")) {
-            String number = input.split(" ")[1];
-            int value = Integer.parseInt(number) - 1;
-            assert value >= 0;
-            return new UnmarkCommand(value);
-        } else if (input.startsWith("delete ")) {
-            String number = input.split(" ")[1];
-            int value = Integer.parseInt(number) - 1;
-            assert value >= 0;
-            return new DeleteCommand(value);
-        } else if (input.startsWith("find ")) {
-            String query = input.split(" ", 2)[1];
-            return new FindCommand(query);
-        } else if (input.startsWith("todo ")) {
-            String description = input.split(" ", 2)[1];
-            Task newTask = new Todo(description);
-            return new AddCommand(newTask);
-        } else if (input.startsWith("deadline ")) {
-            String text = input.split(" ", 2)[1];
-            String[] parts = text.split(" /by ", 2);
-            Task newTask = new Deadline(parts[0], LocalDateTime.parse(parts[1], formatter));
-            return new AddCommand(newTask);
-        } else if (input.startsWith("event ")) {
-            String text = input.split(" ", 2)[1];
-            String[] parts = text.split(" /from ", 2);
-            String[] time = parts[1].split(" /to ", 2);
-            Task newTask = new Event(parts[0], time[0], time[1]);
-            return new AddCommand(newTask);
-        } else {
+        case "mark":
+            return new MarkCommand(parseIndex(tokens));
+        case "unmark":
+            return new UnmarkCommand(parseIndex(tokens));
+        case "delete":
+            return new DeleteCommand(parseIndex(tokens));
+        case "find":
+            return new FindCommand(requireArgument(tokens, "find"));
+        case "todo":
+            return parseTodo(tokens);
+        case "deadline":
+            return parseDeadline(tokens);
+        case "event":
+            return parseEvent(tokens);
+        default:
             throw new CateException("I'm sorry I don't understand!");
         }
+    }
+
+    /**
+     * Extracts and parses a 1-based index from a token array.
+     *
+     * @param tokens the split user input tokens, where the second token should contain an integer index
+     * @return a zero-based index corresponding to the parsed number
+     * @throws CateException if the index is missing or cannot be parsed as an integer
+     */
+    private static int parseIndex(String[] tokens) throws CateException {
+        if (tokens.length < 2) {
+            throw new CateException("Index required.");
+        }
+        int val = IInteger.parseInt(tokens[1]) - 1;
+        assert val >= 0;
+        return val;
+    }
+
+    /**
+     * Ensures that a command requiring arguments has a non-empty argument string.
+     *
+     * @param tokens the split user input tokens
+     * @param cmd the name of the command (used in error messages)
+     * @return the non-empty argument string
+     * @throws CateException if the argument is missing or empty
+     */
+    private static String requireArgument(String[] tokens, String cmd) throws CateException {
+        if (tokens.length < 2 || tokens[1].trim().isEmpty()) {
+            throw new CateException("The description of a " + cmd + " cannot be empty.");
+        }
+        return tokens[1].trim();
+    }
+
+    /**
+     * Parses a {@code todo} command into an {@link AddCommand} with a {@link Todo}.
+     *
+     * @param tokens the split user input tokens
+     * @return an {@link AddCommand} containing a {@link Todo}
+     * @throws CateException if the description is missing or empty
+     */
+    private static Command parseTodo(String[] tokens) throws CateException {
+        String description = requireArgument(tokens, "todo");
+        return new AddCommand(new Todo(description));
+    }
+
+    /**
+     * Parses a {@code deadline} command into an {@link AddCommand} with a {@link Deadline}.
+     *
+     * @param tokens the split user input tokens
+     * @return an {@link AddCommand} containing a {@link Deadline}
+     * @throws CateException if the description or deadline time is missing, or improperly formatted
+     */
+    private static Command parseDeadline(String[] tokens) throws CateException {
+        String text = requireArgument(tokens, "deadline");
+        String[] parts = text.split(" /by ", 2);
+        if (parts.length < 2) {
+            throw new CateException("Deadline requires /by.");
+        }
+        return new AddCommand(new Deadline(parts[0], LocalDateTime.parse(parts[1], formatter)));
+    }
+
+    /**
+     * Parses an {@code event} command into an {@link AddCommand} with an {@link Event}.
+     *
+     * @param tokens the split user input tokens
+     * @return an {@link AddCommand} containing an {@link Event}
+     * @throws CateException if the description or event times are missing, or improperly formatted
+     */
+    private static Command parseEvent(String[] tokens) throws CateException {
+        String text = requireArgument(tokens, "event");
+        String[] parts = text.split(" /from ", 2);
+        if (parts.length < 2) {
+            throw new CateException("Event requires /from and /to.");
+        }
+        String[] time = parts[1].split(" /to ", 2);
+        if (time.length < 2) {
+            throw new CateException("Event requires both /from and /to.");
+        }
+        return new AddCommand(new Event(parts[0], time[0], time[1]));
     }
 }

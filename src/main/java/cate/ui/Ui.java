@@ -3,33 +3,12 @@ package cate.ui;
 import cate.task.Task;
 import cate.task.TaskList;
 
-import java.util.Scanner;
-
 /**
  * Handles all user interface interactions for the Cate application.
  * The {@code Ui} class is responsible for displaying messages,
  * formatting output, and reading user input.
  */
 public class Ui {
-    private static final String line = "    _______________________________________\n";
-
-    /**
-     * Constructs a {@code Ui} instance and immediately
-     * shows the startup message.
-     */
-    public Ui() {
-        showStartupMessage();
-    }
-
-    /**
-     * Displays the startup message when the program begins.
-     */
-    public void showStartupMessage() {
-        System.out.println(line
-                + "    Hello! I'm cate.ui.Cate\n"
-                + "    What can I do for you?\n"
-                + line);
-    }
 
     public String printList(TaskList tasks) {
         StringBuilder output = new StringBuilder("Here are the tasks in your list:\n");
