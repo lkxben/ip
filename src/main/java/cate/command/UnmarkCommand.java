@@ -18,4 +18,16 @@ public class UnmarkCommand extends Command {
         storage.save(tasks);
         return ui.unmarkTask(tasks.getTask(index));
     }
+
+    @Override
+    public boolean canUndo() {
+        return true;
+    }
+
+    @Override
+    public String undo(Storage storage, TaskList tasks, Ui ui) {
+        tasks.markTask(index);
+        storage.save(tasks);
+        return ui.markTask(tasks.getTask(index));
+    }
 }

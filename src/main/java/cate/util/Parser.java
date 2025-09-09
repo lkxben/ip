@@ -3,17 +3,10 @@ package cate.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import cate.command.AddCommand;
-import cate.command.Command;
-import cate.command.DeleteCommand;
-import cate.command.ExitCommand;
-import cate.command.FindCommand;
-import cate.command.ListCommand;
-import cate.command.MarkCommand;
-import cate.command.UnmarkCommand;
+import cate.ui.Cate;
+import cate.command.*;
 import cate.task.Deadline;
 import cate.task.Event;
-import cate.task.Task;
 import cate.task.TaskList;
 import cate.task.Todo;
 
@@ -32,7 +25,7 @@ public class Parser {
      * @return a {@link Command} instance representing the parsed input
      * @throws CateException if the input is invalid or cannot be parsed into a command
      */
-    public static Command parse(String input) throws CateException {
+    public static Command parse(String input, Cate cate) throws CateException {
         String[] tokens = input.trim().split(" ", 2);
         String command = tokens[0];
 
@@ -49,6 +42,8 @@ public class Parser {
             return new DeleteCommand(parseIndex(tokens));
         case "find":
             return new FindCommand(requireArgument(tokens, "find"));
+        case "undo":
+            return new UndoCommand(cate.getCommandManager());
         case "todo":
             return parseTodo(tokens);
         case "deadline":
@@ -71,7 +66,7 @@ public class Parser {
         if (tokens.length < 2) {
             throw new CateException("Index required.");
         }
-        int val = IInteger.parseInt(tokens[1]) - 1;
+        int val = Integer.parseInt(tokens[1]) - 1;
         assert val >= 0;
         return val;
     }
