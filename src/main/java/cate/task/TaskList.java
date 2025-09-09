@@ -35,6 +35,10 @@ public class TaskList {
         return list.get(index);
     }
 
+    public int getIndexOfTask(Task task) {
+        return list.indexOf(task);
+    }
+
     public int size() {
         return list.size();
     }
@@ -47,6 +51,10 @@ public class TaskList {
      */
     public void addTask(Task task) {
         list.add(task);
+    }
+
+    public void insertTask(int index, Task task) {
+        list.add(index, task);
     }
 
     /**

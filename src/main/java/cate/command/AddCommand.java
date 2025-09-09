@@ -19,4 +19,16 @@ public class AddCommand extends Command {
         storage.saveTask(task);
         return ui.addTask(task);
     }
+
+    @Override
+    public boolean canUndo() {
+        return true;
+    }
+
+    @Override
+    public String undo(Storage storage, TaskList tasks, Ui ui) {
+        tasks.deleteTask(tasks.getIndexOfTask(task));
+        storage.save(tasks);
+        return ui.undoAddTask(task);
+    }
 }

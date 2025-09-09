@@ -1,6 +1,7 @@
 package cate.ui;
 
 import cate.command.Command;
+import cate.command.CommandManager;
 import cate.task.TaskList;
 import cate.util.CateException;
 import cate.util.Parser;
@@ -16,6 +17,7 @@ public class Cate {
     private TaskList tasks;
     private Storage storage;
     private boolean isExit = false;
+    private final CommandManager commandManager = new CommandManager();
 
     /**
      * Constructs a {@code Cate} instance with the given file path
@@ -35,9 +37,10 @@ public class Cate {
     public String getResponse(String input) {
         String output = "";
         try {
-            Command c = Parser.parse(input);
+            Command c = Parser.parse(input, this);
             output = c.execute(storage, tasks, ui);
             isExit = c.isExit();
+            commandManager.addCommand(c);
         } catch (CateException e) {
             return e.getMessage();
         }
@@ -46,6 +49,10 @@ public class Cate {
 
     public boolean isExit() {
         return isExit;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public static void main(String[] args) {

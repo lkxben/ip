@@ -30,6 +30,14 @@ public class Ui {
         return String.format("Noted. I've removed this task:\n%s\nNow you have %d tasks in the list.\n", t, size);
     }
 
+    public String undoAddTask(Task t) {
+        return String.format("OK, I've removed the task you just added:\n  %s", t);
+    }
+
+    public String undoDeleteTask(Task t) {
+        return String.format("OK, I've restored the task you just deleted:\n  %s", t);
+    }
+
     public String markTask(Task t) {
         return String.format("Nice! I've marked this task as done:\n%s", t);
     }
