@@ -17,12 +17,24 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
+/**
+ * Represents a dialog box in the chat GUI.
+ * Each dialog box consists of a text label and optionally an avatar image.
+ * Supports different styles for user messages, Cate messages, and error messages.
+ */
 public class DialogBox extends HBox {
     @FXML
     private Label dialog;
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Constructs a DialogBox with the specified text and image.
+     * If the image is null, the avatar is hidden and space is not reserved.
+     *
+     * @param text the message text to display
+     * @param img  the avatar image; null if no image should be shown
+     */
     private DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
@@ -55,6 +67,10 @@ public class DialogBox extends HBox {
         setSpacing(6);
     }
 
+    /**
+     * Flips the dialog box so that the avatar is on the left and text on the right.
+     * Used for Cate messages and error messages.
+     */
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         Collections.reverse(tmp);
@@ -62,6 +78,13 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_LEFT);
     }
 
+    /**
+     * Creates a dialog box for a user message.
+     * User messages do not display an avatar and are right-aligned.
+     *
+     * @param text the user message text
+     * @return a DialogBox styled for the user
+     */
     public static DialogBox getUserDialog(String text) {
         var db = new DialogBox(text, null);
         db.setAlignment(Pos.TOP_RIGHT);
@@ -75,6 +98,14 @@ public class DialogBox extends HBox {
         return db;
     }
 
+    /**
+     * Creates a dialog box for Cate messages.
+     * Cate messages display the avatar on the left and are left-aligned.
+     *
+     * @param text the Cate message text
+     * @param img  the Cate avatar image
+     * @return a DialogBox styled for Cate
+     */
     public static DialogBox getCateDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
@@ -86,6 +117,15 @@ public class DialogBox extends HBox {
         return db;
     }
 
+    /**
+     * Creates a dialog box for error messages.
+     * Error messages display the avatar on the left and are left-aligned,
+     * and use a distinct style to highlight errors.
+     *
+     * @param text the error message text
+     * @param img  the avatar image to display with the error
+     * @return a DialogBox styled for errors
+     */
     public static DialogBox getErrorDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

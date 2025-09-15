@@ -16,8 +16,11 @@ import cate.task.Todo;
 
 /**
  * Handles persistent storage of tasks for the Cate application.
- * The {@code Storage} class loads tasks from a file at startup
- * and saves tasks to the file when new tasks are added.
+ * <p>
+ * The {@code Storage} class loads tasks from a file at startup and saves tasks
+ * to the file whenever they are added, deleted, or updated. Each task is stored
+ * in a simple text format, which can be read back into memory at runtime.
+ * </p>
  */
 public class Storage {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
@@ -34,6 +37,7 @@ public class Storage {
 
     /**
      * Loads tasks from the file into memory.
+     * <p>
      * Each line in the file corresponds to one task in the format:
      * <ul>
      *   <li>{@code T,doneFlag,description}</li>
@@ -41,8 +45,10 @@ public class Storage {
      *   <li>{@code E,doneFlag,description,start,end}</li>
      * </ul>
      * where {@code doneFlag} is {@code 1} if the task is completed, otherwise {@code 0}.
+     * </p>
      *
      * @return An {@link ArrayList} containing the loaded tasks.
+     *      Returns an empty list if the file does not exist or is empty.
      */
     public ArrayList<Task> load() {
         ArrayList<Task> output = new ArrayList<>();
@@ -94,6 +100,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the entire task list to the file, overwriting any existing content.
+     *
+     * @param tasks The {@link TaskList} containing tasks to be saved.
+     */
     public void save(TaskList tasks) {
         try {
             ensureFileExists();
@@ -107,6 +118,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Ensures that the storage file exists. Creates the file and parent directories if they do not exist.
+     *
+     * @throws IOException if the file or directories cannot be created
+     */
     private void ensureFileExists() throws IOException {
         File file = new File(filePath);
         if (!file.exists()) {
