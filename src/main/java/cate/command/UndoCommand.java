@@ -1,8 +1,9 @@
 package cate.command;
 
+import cate.exception.CateException;
+import cate.exception.NothingToUndoException;
 import cate.task.TaskList;
 import cate.ui.Ui;
-import cate.util.CateException;
 import cate.util.Storage;
 
 /**
@@ -34,7 +35,7 @@ public class UndoCommand extends Command {
     @Override
     public String execute(Storage storage, TaskList tasks, Ui ui) throws CateException {
         if (!manager.hasUndoableCommand()) {
-            throw new CateException("Nothing to undo!");
+            throw new NothingToUndoException();
         }
         Command last = manager.popLastCommand();
         return last.undo(storage, tasks, ui);

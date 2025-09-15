@@ -1,8 +1,9 @@
 package cate.command;
 
+import cate.exception.CannotUndoException;
+import cate.exception.CateException;
 import cate.task.TaskList;
 import cate.ui.Ui;
-import cate.util.CateException;
 import cate.util.Storage;
 
 /**
@@ -50,6 +51,6 @@ public abstract class Command {
      * @throws CateException if the command cannot be undone
      */
     public String undo(Storage storage, TaskList tasks, Ui ui) throws CateException {
-        throw new CateException("This command cannot be undone.");
+        throw new CannotUndoException();
     }
 }
