@@ -14,6 +14,17 @@ public class TaskList {
     private List<Task> list;
 
     /**
+     * Constructs an empty {@code TaskList}.
+     * <p>
+     * This initializes the internal list of tasks to an empty {@link ArrayList},
+     * allowing tasks to be added later.
+     * </p>
+     */
+    public TaskList() {
+        this.list = new ArrayList<>();
+    }
+
+    /**
      * Constructs a {@code TaskList} with an existing list of tasks.
      *
      * @param list The list of tasks to initialize this {@code TaskList} with.

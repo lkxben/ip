@@ -1,6 +1,6 @@
 package cate.ui;
 
-import cate.util.CateException;
+import cate.exception.CateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;

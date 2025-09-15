@@ -2,8 +2,8 @@ package cate.ui;
 
 import cate.command.Command;
 import cate.command.CommandManager;
+import cate.exception.CateException;
 import cate.task.TaskList;
-import cate.util.CateException;
 import cate.util.Parser;
 import cate.util.Storage;
 
