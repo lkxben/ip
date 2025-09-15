@@ -1,5 +1,6 @@
 package cate.ui;
 
+import cate.util.CateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -25,8 +26,7 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Cate cate;
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image cateImage = new Image(this.getClass().getResourceAsStream("/images/DaCate.png"));
+    private Image cateImage = new Image(this.getClass().getResourceAsStream("/images/Cate.jpeg"));
 
     @FXML
     public void initialize() {
@@ -48,11 +48,18 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = cate.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getCateDialog(response, cateImage)
-        );
+        try {
+            String response = cate.getResponse(input);
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input),
+                    DialogBox.getCateDialog(response, cateImage)
+            );
+        } catch (CateException e) {
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input),
+                    DialogBox.getErrorDialog(e.getMessage(), cateImage)
+            );
+        }
         userInput.clear();
 
         if (cate.isExit()) {
