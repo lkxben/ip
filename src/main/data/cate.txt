@@ -1,4 +1,4 @@
 T,1,read book
-T,0,join sports club
-D,0,return book,2025-06-20 1600
+T,1,submit assignment
+D,0,return book,2025-10-20 1600
 E,0,project meeting,Mon 2pm,4pm

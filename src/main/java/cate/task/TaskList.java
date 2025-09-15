@@ -1,6 +1,7 @@
 package cate.task;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -10,14 +11,14 @@ import java.util.stream.Collectors;
  */
 public class TaskList {
     private static final String line = "    _______________________________________\n";
-    private ArrayList<Task> list;
+    private List<Task> list;
 
     /**
      * Constructs a {@code TaskList} with an existing list of tasks.
      *
      * @param list The list of tasks to initialize this {@code TaskList} with.
      */
-    public TaskList(ArrayList<Task> list) {
+    public TaskList(List<Task> list) {
         this.list = list;
     }
 
@@ -27,7 +28,7 @@ public class TaskList {
      *
      * @return A new {@link ArrayList} containing all tasks in this list.
      */
-    public ArrayList<Task> getList() {
+    public List<Task> getList() {
         return new ArrayList<>(list);
     }
 
@@ -99,10 +100,9 @@ public class TaskList {
      *
      * @param query the keyword to search for within task descriptions
      */
-    public ArrayList<Task> findTasks(String query) {
+    public List<Task> findTasks(String query) {
         return list.stream()
                 .filter(t -> t.descriptionContains(query))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toList());
     }
-
 }
