@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import cate.task.Deadline;
@@ -16,118 +17,134 @@ import cate.task.Todo;
 
 /**
  * Handles persistent storage of tasks for the Cate application.
- * <p>
- * The {@code Storage} class loads tasks from a file at startup and saves tasks
- * to the file whenever they are added, deleted, or updated. Each task is stored
- * in a simple text format, which can be read back into memory at runtime.
- * </p>
  */
 public class Storage {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private final String filePath;
 
-    /**
-     * Constructs a {@code Storage} instance with the given file path.
-     *
-     * @param filePath The path to the file where tasks will be saved and loaded.
-     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Loads tasks from the file into memory.
-     * <p>
-     * Each line in the file corresponds to one task in the format:
-     * <ul>
-     *   <li>{@code T,doneFlag,description}</li>
-     *   <li>{@code D,doneFlag,description,yyyy-MM-dd HHmm}</li>
-     *   <li>{@code E,doneFlag,description,start,end}</li>
-     * </ul>
-     * where {@code doneFlag} is {@code 1} if the task is completed, otherwise {@code 0}.
-     * </p>
+     * Loads all tasks from the storage file.
      *
-     * @return An {@link ArrayList} containing the loaded tasks.
-     *      Returns an empty list if the file does not exist or is empty.
+     * @return a list of tasks from the file, empty if file is missing or empty
      */
-    public ArrayList<Task> load() {
-        ArrayList<Task> output = new ArrayList<>();
-        try {
-            ensureFileExists();
-            File file = new File(filePath);
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine().trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
-                String[] parts = line.split(",");
-                String desc = parts[2];
-                Task t = null;
-                if (parts[0].equals("T")) {
-                    t = new Todo(desc);
-                } else if (parts[0].equals("D")) {
-                    t = new Deadline(desc, LocalDateTime.parse(parts[3], formatter));
-                } else if (parts[0].equals("E")) {
-                    t = new Event(desc, parts[3], parts[4]);
-                }
-                boolean done = parts[1].equals("1");
-                if (done && t != null) {
-                    t.markDone();
-                }
-                output.add(t);
-            }
-            sc.close();
-        } catch (IOException ignored) {
-            return output;
-        }
-        return output;
+    public List<Task> load() {
+        ensureFileExists();
+        List<String> lines = readAllLines();
+        return parseTasks(lines);
     }
 
     /**
-     * Appends a single task to the file in its storage format.
+     * Saves a single task to the file.
      *
-     * @param task The {@link Task} to be saved.
+     * @param task the task to save
      */
     public void saveTask(Task task) {
-        try {
-            ensureFileExists();
-            try (FileWriter writer = new FileWriter(filePath, true)) {
-                writer.write(task.toFileString() + System.lineSeparator());
-            }
-        } catch (IOException e) {
-            // Ignored silently
-        }
+        ensureFileExists();
+        appendLine(task.toFileString());
     }
 
     /**
-     * Saves the entire task list to the file, overwriting any existing content.
+     * Saves the entire task list, overwriting the existing file.
      *
-     * @param tasks The {@link TaskList} containing tasks to be saved.
+     * @param tasks the TaskList to save
      */
     public void save(TaskList tasks) {
-        try {
-            ensureFileExists();
-            try (FileWriter writer = new FileWriter(filePath, false)) {
-                for (Task task : tasks.getList()) {
-                    writer.write(task.toFileString() + System.lineSeparator());
-                }
+        ensureFileExists();
+        List<String> lines = tasksToLines(tasks);
+        writeAllLines(lines);
+    }
+
+    /** Reads all lines from the file. */
+    private List<String> readAllLines() {
+        List<String> lines = new ArrayList<>();
+        try (Scanner sc = new Scanner(new File(filePath))) {
+            while (sc.hasNextLine()) {
+                lines.add(sc.nextLine().trim());
             }
-        } catch (IOException e) {
-            // Ignored silently
+        } catch (IOException ignored) {
+            // ignore
+        }
+        return lines;
+    }
+
+    /** Parses lines from file into Task objects. */
+    private List<Task> parseTasks(List<String> lines) {
+        List<Task> tasks = new ArrayList<>();
+        for (String line : lines) {
+            if (line.isEmpty()) {
+                continue;
+            }
+            Task task = parseTask(line);
+            if (task != null) {
+                tasks.add(task);
+            }
+        }
+        return tasks;
+    }
+
+    /** Parses a single line into a Task object. */
+    private Task parseTask(String line) {
+        String[] parts = line.split(",");
+        String type = parts[0];
+        boolean done = parts[1].equals("1");
+        String desc = parts[2];
+
+        Task task = switch (type) {
+        case "T" -> new Todo(desc);
+        case "D" -> new Deadline(desc, LocalDateTime.parse(parts[3], formatter));
+        case "E" -> new Event(desc, parts[3], parts[4]);
+        default -> null;
+        };
+
+        if (task != null && done) {
+            task.markDone();
+        }
+        return task;
+    }
+
+    /** Converts TaskList to list of strings for file writing. */
+    private List<String> tasksToLines(TaskList tasks) {
+        List<String> lines = new ArrayList<>();
+        for (Task t : tasks.getList()) {
+            lines.add(t.toFileString());
+        }
+        return lines;
+    }
+
+    /** Writes all lines to the file, overwriting existing content. */
+    private void writeAllLines(List<String> lines) {
+        try (FileWriter writer = new FileWriter(filePath, false)) {
+            for (String line : lines) {
+                writer.write(line + System.lineSeparator());
+            }
+        } catch (IOException ignored) {
+            // ignore
         }
     }
 
-    /**
-     * Ensures that the storage file exists. Creates the file and parent directories if they do not exist.
-     *
-     * @throws IOException if the file or directories cannot be created
-     */
-    private void ensureFileExists() throws IOException {
-        File file = new File(filePath);
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
+    /** Appends a single line to the file. */
+    private void appendLine(String line) {
+        try (FileWriter writer = new FileWriter(filePath, true)) {
+            writer.write(line + System.lineSeparator());
+        } catch (IOException ignored) {
+            // ignore
+        }
+    }
+
+    /** Ensures the file and parent directories exist. */
+    private void ensureFileExists() {
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+        } catch (IOException ignored) {
+            // ignore
         }
     }
 }
