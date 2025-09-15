@@ -34,16 +34,12 @@ public class Cate {
     /**
      * Generates a response for the user's chat message.
      */
-    public String getResponse(String input) {
+    public String getResponse(String input) throws CateException {
         String output = "";
-        try {
-            Command c = Parser.parse(input, this);
-            output = c.execute(storage, tasks, ui);
-            isExit = c.isExit();
-            commandManager.addCommand(c);
-        } catch (CateException e) {
-            return e.getMessage();
-        }
+        Command c = Parser.parse(input, this);
+        output = c.execute(storage, tasks, ui);
+        isExit = c.isExit();
+        commandManager.addCommand(c);
         return output;
     }
 

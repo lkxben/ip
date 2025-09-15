@@ -1,5 +1,6 @@
 package cate.ui;
 
+import cate.util.CateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,8 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 /**
- * Controller for the main GUI.
+ * Controller for the main GUI of the Cate application.
+ * Handles user input, displays messages, and manages the chat dialog container.
  */
 public class MainWindow extends AnchorPane {
     private static final String STARTUP_MESSAGE =
@@ -25,9 +28,13 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Cate cate;
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image cateImage = new Image(this.getClass().getResourceAsStream("/images/DaCate.png"));
+    private Image cateImage = new Image(this.getClass().getResourceAsStream("/images/Cate.jpeg"));
 
+    /**
+     * Initializes the GUI after FXML loading.
+     * Binds the scroll pane to the height of the dialog container and
+     * displays the initial startup message from Cate.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
@@ -36,23 +43,36 @@ public class MainWindow extends AnchorPane {
         );
     }
 
-    /** Injects the Cate instance */
+    /**
+     * Injects the Cate instance for processing user commands.
+     *
+     * @param d the Cate instance to use
+     */
     public void setCate(Cate d) {
         cate = d;
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Cate's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Handles user input when the send button is pressed or Enter is hit.
+     * Creates dialog boxes for the user's message and Cate's response (or error),
+     * appends them to the dialog container, and clears the input field.
+     * Exits the application if Cate signals termination.
      */
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = cate.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getCateDialog(response, cateImage)
-        );
+        try {
+            String response = cate.getResponse(input);
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input),
+                    DialogBox.getCateDialog(response, cateImage)
+            );
+        } catch (CateException e) {
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input),
+                    DialogBox.getErrorDialog(e.getMessage(), cateImage)
+            );
+        }
         userInput.clear();
 
         if (cate.isExit()) {
