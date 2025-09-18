@@ -14,7 +14,7 @@ public class InvalidDeadlineException extends CateException {
      * Constructs an {@code InvalidDeadlineException} with a default message
      * indicating the missing or invalid deadline specification.
      */
-    public InvalidDeadlineException() {
-        super("Deadline requires /by and a valid date/time.");
+    public InvalidDeadlineException(String message) {
+        super(message);
     }
 }

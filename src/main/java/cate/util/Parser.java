@@ -2,6 +2,7 @@ package cate.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import cate.command.AddCommand;
 import cate.command.Command;
@@ -143,9 +144,15 @@ public class Parser {
         String text = requireArgument(tokens, "deadline");
         String[] parts = text.split(" /by ", 2);
         if (parts.length < 2) {
-            throw new InvalidDeadlineException();
+            throw new InvalidDeadlineException("Missing /by for deadline: " + text);
         }
-        return new AddCommand(new Deadline(parts[0], LocalDateTime.parse(parts[1], formatter)));
+
+        try {
+            LocalDateTime deadline = LocalDateTime.parse(parts[1], formatter);
+            return new AddCommand(new Deadline(parts[0], deadline));
+        } catch (DateTimeParseException e) {
+            throw new InvalidDeadlineException("Deadline date/time should be in YYYY-MM-DD HHMM format!");
+        }
     }
 
     /**
