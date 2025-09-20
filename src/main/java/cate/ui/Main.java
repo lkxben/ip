@@ -13,7 +13,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private Cate cate = new Cate("src/main/data/cate.txt");
+    private Cate cate = new Cate("data/cate.txt");
 
     @Override
     public void start(Stage stage) {
